@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Filter, GridIcon, LayoutList, ChevronDown, ChevronUp, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -77,7 +77,7 @@ const sizeOptions = [
   { id: 'XXL', label: 'XXL' },
 ];
 
-const products = [
+const allProducts = [
   {
     id: '1',
     name: 'Куртка с капюшоном',
@@ -86,7 +86,8 @@ const products = [
     colors: ['#000000', '#3B82F6', '#FFFFFF'],
     sizes: ['S', 'M', 'L', 'XL'],
     is3DAvailable: true,
-    isNew: true
+    isNew: true,
+    category: 'women'
   },
   {
     id: '2',
@@ -97,7 +98,8 @@ const products = [
     colors: ['#000000', '#334155'],
     sizes: ['S', 'M', 'L'],
     is3DAvailable: false,
-    isSale: true
+    isSale: true,
+    category: 'men'
   },
   {
     id: '3',
@@ -106,7 +108,8 @@ const products = [
     imageUrl: '/placeholder.svg',
     colors: ['#FAFAFA', '#F97316', '#22C55E'],
     sizes: ['S', 'M', 'L'],
-    is3DAvailable: true
+    is3DAvailable: true,
+    category: 'women'
   },
   {
     id: '4',
@@ -116,7 +119,8 @@ const products = [
     colors: ['#000000', '#EC4899'],
     sizes: ['XS', 'S', 'M'],
     is3DAvailable: true,
-    isNew: true
+    isNew: true,
+    category: 'women'
   },
   {
     id: '5',
@@ -125,7 +129,8 @@ const products = [
     imageUrl: '/placeholder.svg',
     colors: ['#000000', '#FFFFFF', '#3B82F6'],
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    is3DAvailable: false
+    is3DAvailable: false,
+    category: 'men'
   },
   {
     id: '6',
@@ -134,7 +139,8 @@ const products = [
     imageUrl: '/placeholder.svg',
     colors: ['#3B82F6', '#F97316'],
     sizes: ['S', 'M', 'L'],
-    is3DAvailable: true
+    is3DAvailable: true,
+    category: 'men'
   },
   {
     id: '7',
@@ -144,7 +150,8 @@ const products = [
     colors: ['#000000', '#FAFAFA'],
     sizes: ['S', 'M', 'L'],
     is3DAvailable: true,
-    isNew: true
+    isNew: true,
+    category: 'women'
   },
   {
     id: '8',
@@ -155,8 +162,29 @@ const products = [
     colors: ['#000000', '#FFFFFF'],
     sizes: ['XS', 'S', 'M'],
     is3DAvailable: false,
-    isSale: true
+    isSale: true,
+    category: 'women'
   },
+  {
+    id: '9',
+    name: 'Сумка кросс-боди',
+    price: 3490,
+    imageUrl: '/placeholder.svg',
+    colors: ['#000000', '#A855F7'],
+    sizes: ['Universal'],
+    is3DAvailable: true,
+    category: 'accessories'
+  },
+  {
+    id: '10',
+    name: 'Шляпа федора',
+    price: 1990,
+    imageUrl: '/placeholder.svg',
+    colors: ['#000000', '#F59E0B'],
+    sizes: ['S', 'M', 'L'],
+    is3DAvailable: false,
+    category: 'accessories'
+  }
 ];
 
 const sortOptions = [
@@ -166,7 +194,16 @@ const sortOptions = [
   { value: 'priceDesc', label: 'Цена: по убыванию' },
 ];
 
+// Категории для заголовков
+const categoryTitles: Record<string, string> = {
+  'women': 'Женская одежда',
+  'men': 'Мужская одежда',
+  'accessories': 'Аксессуары',
+  'autumn-2023': 'Осенняя коллекция 2023'
+};
+
 const Catalog = () => {
+  const { category } = useParams<{ category?: string }>();
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('popular');
   const [showFilters, setShowFilters] = useState(false);
@@ -177,6 +214,28 @@ const Catalog = () => {
     priceRange: [0, 10000] as [number, number]
   });
   const [activeFiltersCount, setActiveFiltersCount] = useState(0);
+  const [products, setProducts] = useState(allProducts);
+  const [pageTitle, setPageTitle] = useState('Каталог');
+
+  // Фильтрация продуктов при изменении категории из URL
+  useEffect(() => {
+    if (category) {
+      // Проверка, это категория или коллекция
+      if (category.startsWith('autumn-') || category.includes('collection')) {
+        // Для коллекций можно выбрать случайные товары или специальные для коллекции
+        setProducts(allProducts.slice(0, 6)); // Пример: первые 6 товаров для коллекции
+        setPageTitle(categoryTitles[category] || 'Коллекция');
+      } else {
+        // Для обычных категорий
+        const filteredProducts = allProducts.filter(product => product.category === category);
+        setProducts(filteredProducts);
+        setPageTitle(categoryTitles[category] || 'Каталог');
+      }
+    } else {
+      setProducts(allProducts);
+      setPageTitle('Каталог');
+    }
+  }, [category]);
 
   const handleFilterChange = (filters: any) => {
     setSelectedFilters(filters);
@@ -186,6 +245,25 @@ const Catalog = () => {
       filters.sizes.length + 
       (filters.priceRange[0] > 0 || filters.priceRange[1] < 10000 ? 1 : 0);
     setActiveFiltersCount(count);
+    
+    // Здесь можно добавить логику для фильтрации продуктов на основе выбранных фильтров
+    // Это простой пример, как могла бы работать фильтрация:
+    let filtered = [...allProducts];
+    
+    // Фильтрация по категории из URL
+    if (category) {
+      filtered = filtered.filter(product => product.category === category);
+    }
+    
+    // Дополнительная фильтрация по выбранным фильтрам
+    if (filters.categories.length > 0) {
+      // Пример простой фильтрации, в реальном приложении логика будет сложнее
+      // filtered = filtered.filter(p => filters.categories.includes(p.categoryId));
+    }
+    
+    // Другие фильтры можно добавить аналогично
+    
+    setProducts(filtered);
   };
 
   return (
@@ -196,11 +274,19 @@ const Catalog = () => {
         <div className="container mx-auto px-4">
           {/* Page Title */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Каталог</h1>
+            <h1 className="text-3xl font-bold mb-2">{pageTitle}</h1>
             <div className="flex text-sm text-muted-foreground">
               <Link to="/" className="hover:text-foreground">Главная</Link>
               <span className="mx-2">/</span>
-              <span>Каталог</span>
+              {category ? (
+                <>
+                  <Link to="/catalog" className="hover:text-foreground">Каталог</Link>
+                  <span className="mx-2">/</span>
+                  <span>{pageTitle}</span>
+                </>
+              ) : (
+                <span>Каталог</span>
+              )}
             </div>
           </div>
           
@@ -499,24 +585,48 @@ const Catalog = () => {
                 </div>
               )}
               
-              {/* Pagination */}
-              <div className="flex justify-center mt-12">
-                <div className="flex items-center space-x-2">
-                  <Button variant="outline" disabled>
-                    <ChevronUp className="h-4 w-4 -rotate-90" />
-                  </Button>
-                  <Button variant="outline" className="bg-fashion-primary text-white">
-                    1
-                  </Button>
-                  <Button variant="outline">2</Button>
-                  <Button variant="outline">3</Button>
-                  <span>...</span>
-                  <Button variant="outline">10</Button>
-                  <Button variant="outline">
-                    <ChevronDown className="h-4 w-4 -rotate-90" />
+              {/* Отображаем сообщение, если нет товаров */}
+              {products.length === 0 && (
+                <div className="text-center py-16">
+                  <p className="text-muted-foreground mb-4">
+                    Товары по вашему запросу не найдены
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      handleFilterChange({
+                        categories: [],
+                        colors: [],
+                        sizes: [],
+                        priceRange: [0, 10000] as [number, number]
+                      });
+                    }}
+                  >
+                    Сбросить все фильтры
                   </Button>
                 </div>
-              </div>
+              )}
+              
+              {/* Pagination (отображаем только если есть товары) */}
+              {products.length > 0 && (
+                <div className="flex justify-center mt-12">
+                  <div className="flex items-center space-x-2">
+                    <Button variant="outline" disabled>
+                      <ChevronUp className="h-4 w-4 -rotate-90" />
+                    </Button>
+                    <Button variant="outline" className="bg-fashion-primary text-white">
+                      1
+                    </Button>
+                    <Button variant="outline">2</Button>
+                    <Button variant="outline">3</Button>
+                    <span>...</span>
+                    <Button variant="outline">10</Button>
+                    <Button variant="outline">
+                      <ChevronDown className="h-4 w-4 -rotate-90" />
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
