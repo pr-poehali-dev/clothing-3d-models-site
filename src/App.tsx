@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Catalog from "./pages/Catalog";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
+import VirtualTryOn from "./pages/VirtualTryOn";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +24,7 @@ const App = () => (
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/collections/:id" element={<Catalog />} />
           <Route path="/how-it-works" element={<Index />} />
-          <Route path="/virtual-try-on" element={<Index />} />
+          <Route path="/virtual-try-on" element={<VirtualTryOn />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

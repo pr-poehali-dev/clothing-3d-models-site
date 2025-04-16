@@ -6,7 +6,8 @@ import {
   ChevronRight,
   Truck,
   RefreshCw,
-  Shield
+  Shield,
+  Cube
 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -74,7 +75,7 @@ const relatedProducts = [
     imageUrl: '/placeholder.svg',
     colors: ['#000000', '#FAFAFA'],
     sizes: ['S', 'M', 'L'],
-    is3DAvailable: false
+    is3DAvailable: true
   },
   {
     id: '4',
@@ -132,13 +133,28 @@ const ProductDetail = () => {
             <div className="space-y-4">
               <div className="bg-muted/30 rounded-lg overflow-hidden">
                 {showModel ? (
-                  <Model3D alt={productData.name} placeholderImageUrl={productData.images[activeImageIndex]} />
-                ) : (
-                  <img 
-                    src={productData.images[activeImageIndex]} 
+                  <Model3D 
                     alt={productData.name} 
-                    className="w-full aspect-square object-cover"
+                    placeholderImageUrl={productData.images[activeImageIndex]} 
+                    productId={id}
                   />
+                ) : (
+                  <div className="relative">
+                    <img 
+                      src={productData.images[activeImageIndex]} 
+                      alt={productData.name} 
+                      className="w-full aspect-square object-cover"
+                    />
+                    {productData.is3DAvailable && (
+                      <button
+                        className="absolute bottom-4 right-4 bg-white rounded-full p-2 shadow-md hover:bg-fashion-primary hover:text-white transition-colors"
+                        onClick={toggleModel}
+                        title="Открыть 3D модель"
+                      >
+                        <Cube className="h-5 w-5" />
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
               
@@ -250,6 +266,28 @@ const ProductDetail = () => {
                   ))}
                 </div>
               </div>
+              
+              {/* 3D Virtual Try On */}
+              {productData.is3DAvailable && (
+                <div className="mb-6 p-4 border rounded-lg bg-accent/20">
+                  <div className="flex items-start">
+                    <Cube className="h-5 w-5 mr-3 text-fashion-primary shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-medium mb-1">Виртуальная примерка</h4>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Оцените как будет сидеть модель с помощью 3D-примерки
+                      </p>
+                      <Button 
+                        className="bg-fashion-primary hover:bg-fashion-primary/90"
+                        onClick={toggleModel}
+                      >
+                        <Cube className="h-4 w-4 mr-2" />
+                        Примерить в 3D
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
               
               {/* Quantity and Add to Cart */}
               <div className="flex items-center space-x-4 mb-6">
