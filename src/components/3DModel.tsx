@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { RotateCw, Maximize, MinusCircle, PlusCircle, ArrowLeft, ArrowRight, Cube } from 'lucide-react';
+import { RotateCw, Maximize, MinusCircle, PlusCircle, ArrowLeft, ArrowRight, Box } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface Model3DProps {
@@ -155,7 +155,7 @@ const Model3D = ({ modelUrl, alt, placeholderImageUrl = '/placeholder.svg', prod
 
       {/* 3D Badge */}
       <div className="absolute top-4 left-4 bg-fashion-primary text-white px-2 py-1 rounded-md text-xs font-medium flex items-center">
-        <Cube className="h-3 w-3 mr-1" />
+        <Box className="h-3 w-3 mr-1" />
         3D Модель
       </div>
 

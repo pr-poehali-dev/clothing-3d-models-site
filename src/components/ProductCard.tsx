@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heart, ShoppingBag, Cube } from 'lucide-react';
+import { Heart, ShoppingBag, Box } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -69,7 +69,7 @@ const ProductCard = ({
             }}
             title="Посмотреть 3D модель"
           >
-            <Cube className="h-4 w-4" />
+            <Box className="h-4 w-4" />
           </button>
         )}
         
@@ -116,7 +116,7 @@ const ProductCard = ({
         {/* 3D label */}
         {is3DAvailable && (
           <div className="absolute bottom-3 left-3 bg-black/70 text-white px-2 py-1 rounded text-xs flex items-center">
-            <Cube className="h-3 w-3 mr-1" />
+            <Box className="h-3 w-3 mr-1" />
             3D модель
           </div>
         )}

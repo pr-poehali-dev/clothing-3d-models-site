@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { CameraIcon, RefreshCw, Download, MoveRight, Share2, Cube } from 'lucide-react';
+import { CameraIcon, RefreshCw, Download, MoveRight, Share2, Box } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -204,7 +204,7 @@ const VirtualTryOn = () => {
                         </p>
                       </div>
                       {selectedModel.id === model.id && (
-                        <Cube className="h-5 w-5 text-fashion-primary ml-2" />
+                        <Box className="h-5 w-5 text-fashion-primary ml-2" />
                       )}
                     </div>
                   ))}
@@ -281,6 +281,8 @@ const VirtualTryOn = () => {
                     <Button variant="outline" size="sm">
                       <Download className="h-4 w-4 mr-1" />
                       Сохранить
+
+
                     </Button>
                     <Button size="sm" className="bg-fashion-primary hover:bg-fashion-primary/90" asChild>
                       <Link to={`/product/${selectedModel.id}`}>
@@ -305,7 +307,7 @@ const VirtualTryOn = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center p-6 border rounded-lg">
                 <div className="w-16 h-16 rounded-full bg-accent flex items-center justify-center mx-auto mb-4">
-                  <Cube className="h-8 w-8 text-fashion-primary" />
+                  <Box className="h-8 w-8 text-fashion-primary" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">Выберите модель</h3>
                 <p className="text-sm text-muted-foreground">

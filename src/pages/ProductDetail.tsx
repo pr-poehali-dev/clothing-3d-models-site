@@ -7,7 +7,7 @@ import {
   Truck,
   RefreshCw,
   Shield,
-  Cube
+  Box
 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -151,7 +151,7 @@ const ProductDetail = () => {
                         onClick={toggleModel}
                         title="Открыть 3D модель"
                       >
-                        <Cube className="h-5 w-5" />
+                        <Box className="h-5 w-5" />
                       </button>
                     )}
                   </div>
@@ -271,7 +271,7 @@ const ProductDetail = () => {
               {productData.is3DAvailable && (
                 <div className="mb-6 p-4 border rounded-lg bg-accent/20">
                   <div className="flex items-start">
-                    <Cube className="h-5 w-5 mr-3 text-fashion-primary shrink-0 mt-0.5" />
+                    <Box className="h-5 w-5 mr-3 text-fashion-primary shrink-0 mt-0.5" />
                     <div>
                       <h4 className="font-medium mb-1">Виртуальная примерка</h4>
                       <p className="text-sm text-muted-foreground mb-2">
@@ -281,7 +281,7 @@ const ProductDetail = () => {
                         className="bg-fashion-primary hover:bg-fashion-primary/90"
                         onClick={toggleModel}
                       >
-                        <Cube className="h-4 w-4 mr-2" />
+                        <Box className="h-4 w-4 mr-2" />
                         Примерить в 3D
                       </Button>
                     </div>
